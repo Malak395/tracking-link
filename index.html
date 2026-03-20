@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GreenPrime</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #0f4c3a, #1a7a5a, #2ecc71);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            color: white;
+        }
+        .container {
+            text-align: center;
+            padding: 40px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            max-width: 500px;
+            margin: 20px;
+        }
+        .checkmark {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 12px;
+        }
+        p {
+            font-size: 16px;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="checkmark">&#10003;</div>
+        <h1>Tu es bien entr&eacute; dans le lien</h1>
+        <p>Merci pour ta visite.</p>
+    </div>
+
+    <script>
+        (function() {
+            var params = new URLSearchParams(window.location.search);
+            var visitor = params.get('v') || 'Inconnu';
+
+            var now = new Date();
+            var date = now.toLocaleDateString('fr-FR', {
+                day: '2-digit', month: '2-digit', year: 'numeric'
+            });
+            var time = now.toLocaleTimeString('fr-FR', {
+                hour: '2-digit', minute: '2-digit'
+            });
+
+            var ua = navigator.userAgent;
+            var device = /Mobile|Android|iPhone/i.test(ua) ? 'Mobile' : 'PC';
+            var browser = 'Inconnu';
+            if (ua.indexOf('Chrome') > -1 && ua.indexOf('Edg') === -1) browser = 'Chrome';
+            else if (ua.indexOf('Safari') > -1 && ua.indexOf('Chrome') === -1) browser = 'Safari';
+            else if (ua.indexOf('Firefox') > -1) browser = 'Firefox';
+            else if (ua.indexOf('Edg') > -1) browser = 'Edge';
+
+            var message = '🔔 *Visite détectée !*\n\n'
+                + '👤 *Visiteur :* ' + visitor + '\n'
+                + '📅 *Date :* ' + date + ' à ' + time + '\n'
+                + '💻 *Appareil :* ' + device + '\n'
+                + '🌐 *Navigateur :* ' + browser;
+
+            var TOKEN = '8726192494:AAE8SBRGiCIQJy1wA9_M6kA8YOqZdGL8SRE';
+            var CHAT_ID = '8458500163';
+            var url = 'https://api.telegram.org/bot' + TOKEN + '/sendMessage';
+
+            fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    chat_id: CHAT_ID,
+                    text: message,
+                    parse_mode: 'Markdown'
+                })
+            });
+        })();
+    </script>
+</body>
+</html>
